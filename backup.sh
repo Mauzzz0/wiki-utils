@@ -1,9 +1,9 @@
- #!/bin/bash
+#!/bin/bash
 
-source '.env'
+source ~/wiki/.env
 
 # Variables
-BACKUP_DIR=./backups
+BACKUP_DIR=~/wiki/backups
 CONTAINER_NAME=wiki-db-1
 
 # Get current date and time for backup file
