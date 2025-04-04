@@ -1,10 +1,12 @@
  #!/bin/bash
 
+source '.env'
+
 # Variables
 BACKUP_DIR=./backups
-DB_NAME=wiki
-DB_USER=wikijs
-DB_PASSWORD=wikijsrocks
+DB_NAME=$POSTGRES_DB
+DB_USER=$POSTGRES_USER
+DB_PASSWORD=$POSTGRES_PASSWORD
 CONTAINER_NAME=wiki-db-1
 
 # Get current date and time for backup file
