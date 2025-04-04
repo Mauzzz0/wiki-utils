@@ -1,3 +1,4 @@
 .idea
 backups
 .DS_Store
+.env
