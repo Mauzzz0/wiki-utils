@@ -67,7 +67,7 @@ async function createPage(filename, path, file) {
 
 const main = async () => {
   const wikiPathName = 'JavaScript'
-  const folder = 'release 2025-04-05T18:04:31.527Z JavaScript';
+  const folder = 'release 2025-04-05T18:47:59.963Z JavaScript';
   const files = fs.readdirSync(folder);
   for (const file of files) {
     if (!file.endsWith('.md')) {

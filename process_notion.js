@@ -72,9 +72,9 @@ async function main() {
         const extension = parts[parts.length - 1];
         const encodedFileName = querystring.escape(newFolderName + ' ');
         const hash = extractHash(file);
-        const oldLink = `${encodedFileName}${hash}/${fileInFolder}`
+        const oldLink = `${encodedFileName}${hash}/${querystring.escape(fileInFolder)}`
 
-        const newFileName = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6)() + `.${extension}`;
+        const newFileName = customAlphabet('abcdefghijklmnopqrstuvwxyz', 6)() + `.${extension}`;
         originalMdFileContent = originalMdFileContent.replace(oldLink, '/' + newFileName);
         originalMdFileContent = originalMdFileContent.replace(`[${fileInFolder}]`, `[${newFileName}]`);
 
