@@ -11,7 +11,7 @@ function cleanName(name) {
 // Конфигурация
 const SOURCE =
   './notion_dump/Notion dump 4 apr 2025 MD version/Private & Shared/Node JS Backend 59c3d6825fe94f988d9ff66bf09799c6';
-const SUBFOLDER = `/JavaScript aab94ab8885944a481b26d4566918a66`;
+const SUBFOLDER = `/Подготовка 183e3e6c787380e18ceeec4a8a3bd3e7`;
 const SOURCE_DIR = SOURCE + SUBFOLDER;
 const TARGET_DIR = 'Cleaned_Structure_5' + cleanName(SUBFOLDER);
 
@@ -47,7 +47,7 @@ async function main() {
         fs.writeFileSync(path.join(TARGET_DIR, newFolderName, cleanName(fileInFolder) + '.md'), originalMdFileContent, 'utf8');
       }
 
-      if (fileInFolder.endsWith('.png')) {
+      if (fileInFolder.endsWith('.png') || fileInFolder.endsWith('.webp')) {
         fs.mkdirSync(path.join(TARGET_DIR, newFolderName), { recursive: true });
         await fs.copyFileSync(
           path.join(folderPath, fileInFolder),
@@ -56,6 +56,7 @@ async function main() {
       }
     }
 
+    fs.mkdirSync(path.join(TARGET_DIR, newFolderName), { recursive: true });
     fs.writeFileSync(path.join(TARGET_DIR, newFileName), originalMdFileContent, 'utf8');
   }
 }

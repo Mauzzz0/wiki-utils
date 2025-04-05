@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "backup:send": "node tg_send_backup.js",
-    "process:notion": "node process_notion.js"
+    "process:notion": "node process_notion.js",
+    "create:page": "node create_page_graphql.js"
   },
   "dependencies": {
+    "axios": "^1.8.4",
     "dotenv": "^16.4.7",
+    "nanoid": "^3.3.11",
     "telegraf": "^4.16.3"
   }
 }
