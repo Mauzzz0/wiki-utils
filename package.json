@@ -1,0 +1,11 @@
+{
+  "name": "wiki",
+  "version": "1.0.0",
+  "scripts": {
+    "backup:send": "node tg_send_backup.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "telegraf": "^4.16.3"
+  }
+}

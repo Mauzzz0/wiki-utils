@@ -2,3 +2,5 @@
 backups
 .DS_Store
 .env
+notion_dump
+node_modules
