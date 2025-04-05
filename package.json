@@ -4,7 +4,8 @@
   "scripts": {
     "backup:send": "node tg_send_backup.js",
     "process:notion": "node process_notion.js",
-    "create:page": "node create_page_graphql.js"
+    "create:page": "node create_page_graphql.js",
+    "delete:page": "node delete_page_graphql.js"
   },
   "dependencies": {
     "axios": "^1.8.4",
