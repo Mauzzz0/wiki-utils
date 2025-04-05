@@ -42,9 +42,22 @@ async function deletePage(id) {
 
 const main = async () => {
   const ids = [
-    12,
-    8,
-
+    70,
+    65,
+    72,
+    59,
+    67,
+    64,
+    68,
+    66,
+    61,
+    73,
+    58,
+    60,
+    62,
+    63,
+    71,
+    69
   ]
 
 

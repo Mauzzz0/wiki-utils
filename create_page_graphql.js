@@ -6,7 +6,7 @@ const { customAlphabet } = require('nanoid');
 
 config();
 
-async function createPage(filename, folder, file) {
+async function createPage(filename, path, file) {
   const graphqlEndpoint = 'http://localhost/graphql';
   const authToken = process.env.TMP_WIKI_JS_API_TOKEN;
 
@@ -24,7 +24,7 @@ async function createPage(filename, folder, file) {
                     isPublished: true
                     isPrivate: false
                     locale: "ru"
-                    path: "${folder}/${slug}"
+                    path: "${path}/${slug}"
                     title: "${file.replace('.md', '')} (x)"
                     tags: []
                 ) {
@@ -66,15 +66,15 @@ async function createPage(filename, folder, file) {
 }
 
 const main = async () => {
-  const base = 'Cleaned_Structure_5 release v1'
-  const folder = 'JavaScript';
-  const files = fs.readdirSync(path.join(base, folder));
+  const wikiPathName = 'JavaScript'
+  const folder = 'release 2025-04-05T18:04:31.527Z JavaScript';
+  const files = fs.readdirSync(folder);
   for (const file of files) {
     if (!file.endsWith('.md')) {
       continue;
     }
 
-    await createPage(path.join(base, folder, file), folder, file);
+    await createPage(path.join(folder, file), wikiPathName, file);
   }
 }
 

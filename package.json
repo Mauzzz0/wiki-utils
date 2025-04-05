@@ -11,6 +11,7 @@
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
     "nanoid": "^3.3.11",
+    "querystring": "^0.2.1",
     "telegraf": "^4.16.3"
   }
 }

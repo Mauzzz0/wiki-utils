@@ -1,5 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const querystring = require('querystring');
+const { customAlphabet } = require('nanoid');
+
+function extractHash(name) {
+  const split = name.split(' ');
+  return split[split.length - 1].replace('.md', '');
+}
 
 function cleanName(name) {
   return name
@@ -11,8 +18,8 @@ function cleanName(name) {
 // Конфигурация
 const SOURCE =
   './notion_dump/Notion dump 4 apr 2025 MD version/Private & Shared/Node JS Backend 59c3d6825fe94f988d9ff66bf09799c6';
-const SUBFOLDER = `/JavaScript aab94ab8885944a481b26d4566918a66`;
-const SOURCE_DIR = SOURCE + SUBFOLDER;
+const SUBFOLDER = `JavaScript aab94ab8885944a481b26d4566918a66`;
+const SOURCE_DIR = SOURCE + '/' + SUBFOLDER;
 const TARGET_DIR = `release ${new Date().toISOString()} ` + cleanName(SUBFOLDER);
 
 const removeNotionMetadata = (content) => {
@@ -46,7 +53,7 @@ async function main() {
       filesInFolder = fs.readdirSync(folderPath);
     } catch (e) {}
 
-    console.log(file, filesInFolder);
+    // console.log(file, filesInFolder);
 
     for (const fileInFolder of filesInFolder) {
       if (fileInFolder.endsWith('.md')) { // && fileInFolder.toLowerCase().includes('задани')
@@ -61,10 +68,20 @@ async function main() {
       }
 
       if (fileInFolder.endsWith('.png') || fileInFolder.endsWith('.webp')) {
-        fs.mkdirSync(path.join(TARGET_DIR, newFolderName), { recursive: true });
+        const parts = fileInFolder.split('.');
+        const extension = parts[parts.length - 1];
+        const encodedFileName = querystring.escape(newFolderName + ' ');
+        const hash = extractHash(file);
+        const oldLink = `${encodedFileName}${hash}/${fileInFolder}`
+
+        const newFileName = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6)() + `.${extension}`;
+        originalMdFileContent = originalMdFileContent.replace(oldLink, '/' + newFileName);
+        originalMdFileContent = originalMdFileContent.replace(`[${fileInFolder}]`, `[${newFileName}]`);
+
+        fs.mkdirSync(path.join(TARGET_DIR, 'images'), { recursive: true });
         await fs.copyFileSync(
           path.join(folderPath, fileInFolder),
-          path.join(TARGET_DIR, newFolderName, `${newFolderName} ${fileInFolder}`)
+          path.join(TARGET_DIR, 'images', newFileName)
         );
       }
     }
