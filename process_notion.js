@@ -10,7 +10,7 @@ const copyFile = promisify(fs.copyFile);
 const mkdir = promisify(fs.mkdir);
 
 const SOURCE_DIR = './notion_dump/Notion dump 4 apr 2025 MD version/Private & Shared/Node JS Backend 59c3d6825fe94f988d9ff66bf09799c6';
-const OUTPUT_DIR = 'Cleaned_Structure_2';
+const OUTPUT_DIR = 'Cleaned_Structure_3';
 
 // Улучшенная функция для удаления хеша из имени
 function cleanName(name) {
@@ -31,6 +31,7 @@ async function findTasksFile(dirPath) {
       }
     }
   } catch (err) {
+    debugger
     // Директория не существует или нет доступа
   }
   return null;
