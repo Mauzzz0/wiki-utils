@@ -13,4 +13,6 @@ BACKUP_FILE=$BACKUP_DIR/backup_$POSTGRES_DB_$TIMESTAMP.sql
 # Run pg_dump inside the PostgreSQL container
 docker exec -t $CONTAINER_NAME pg_dump -U $POSTGRES_USER $POSTGRES_DB > $BACKUP_FILE
 
+cd ~/wiki && npm run backup:send
+
 echo "Backup completed: $BACKUP_FILE"
