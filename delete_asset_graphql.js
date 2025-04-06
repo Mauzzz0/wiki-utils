@@ -31,20 +31,31 @@ async function deleteAsset(id) {
       }
     });
 
-    console.log('Страница успешно удалена:', id);
+    console.log('Asse успешно удален:', id);
   } catch (error) {
-    console.error('Ошибка при удалении страницы:', error.response?.data || error.message);
+    console.error('Ошибка при удалении asset:', error.response?.data || error.message);
     throw error;
   }
 }
 
 const main = async () => {
   const ids = [
-    1
+    {
+      "id": 72
+    },
+    {
+      "id": 73
+    },
+    {
+      "id": 74
+    },
+    {
+      "id": 75
+    }
   ]
 
 
-  for (const id of ids) {
+  for (const { id } of ids) {
     await deleteAsset(id);
   }
 }

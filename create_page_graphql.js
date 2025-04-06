@@ -57,7 +57,8 @@ async function createPage(filename, path, file) {
       }
     });
 
-    console.log('Страница успешно создана:', response.data.data.pages.create);
+    const { id, path, title }  = response.data.data.pages.create.page
+    console.log(`Страница успешно создана: ${id} ${path} ${title}`);
     return response.data.data.pages.create;
   } catch (error) {
     console.error('Ошибка при создании страницы:', error.response?.data || error.message);
@@ -65,9 +66,11 @@ async function createPage(filename, path, file) {
   }
 }
 
+
+
 const main = async () => {
   const wikiPathName = 'JavaScript'
-  const folder = 'release 2025-04-05T18:47:59.963Z JavaScript';
+  const folder = 'release 2025-04-06T09:47:58.316Z JavaScript';
   const files = fs.readdirSync(folder);
   for (const file of files) {
     if (!file.endsWith('.md')) {
