@@ -25,9 +25,9 @@ async function changeCodeblock(id) {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`
+      Authorization: `Bearer ${authToken}`,
     },
-    data: { query: convert }
+    data: { query: convert },
   });
 
   const graphqlQuery = `
@@ -40,32 +40,31 @@ async function changeCodeblock(id) {
         }
     `;
 
+  const response = await axios({
+    url: graphqlEndpoint,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    data: { query: graphqlQuery },
+  });
 
-    const response = await axios({
-      url: graphqlEndpoint,
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
-      data: { query: graphqlQuery }
-    });
+  let content = response.data.data.pages.single.content;
 
-    let content = response.data.data.pages.single.content;
+  // Set TS for codeblock
+  const regex = /class="language-(plaintext|javascript|jsx|tsx)"/g;
+  content = content.replace(regex, 'class="language-typescript"');
 
-    // Set TS for codeblock
-    const regex = /class="language-(plaintext|javascript|jsx|tsx)"/g;
-    content = content.replace(regex, 'class="language-typescript"');
+  // Up h3. (###) to h2. (##) and h2. (##) to h1. (#)
+  content = content.replace(/<\/?h2/g, (match) => (match === '<h2' ? '<h1' : '</h1'));
+  content = content.replace(/<\/?h3/g, (match) => (match === '<h3' ? '<h2' : '</h2'));
 
-    // Up h3. (###) to h2. (##) and h2. (##) to h1. (#)
-    content = content.replace(/<\/?h2/g, match => match === '<h2' ? '<h1' : '</h1');
-    content = content.replace(/<\/?h3/g, match => match === '<h3' ? '<h2' : '</h2');
+  const newline = '<p>&nbsp;</p>';
+  content = content.replace(/<h2/g, newline + '\n' + '<h2');
+  // content = content.replace(/<h1>/g, newline + '\n' +'<h1>');
 
-    const newline = '<p>&nbsp;</p>';
-    content = content.replace(/<h2/g, newline + '\n' +'<h2');
-    // content = content.replace(/<h1>/g, newline + '\n' +'<h1>');
-
-    const mutation = `
+  const mutation = `
     mutation Pages {
     pages {
         update(id: ${id}, content: ${JSON.stringify(content)}, isPublished: true) {
@@ -76,17 +75,17 @@ async function changeCodeblock(id) {
     }
 }`;
 
-     await axios({
-      url: graphqlEndpoint,
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
-      data: { query: mutation }
-    });
+  await axios({
+    url: graphqlEndpoint,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    data: { query: mutation },
+  });
 
-    const render = `
+  const render = `
     mutation Pages {
     pages {
         render(id: ${id}) {
@@ -97,22 +96,19 @@ async function changeCodeblock(id) {
     }
 }`;
 
-    // await axios({
-    //   url: graphqlEndpoint,
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${authToken}`
-    //   },
-    //   data: { query: render }
-    // });
+  // await axios({
+  //   url: graphqlEndpoint,
+  //   method: 'post',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${authToken}`
+  //   },
+  //   data: { query: render }
+  // });
 
-
-
-    console.log(`Страница успешно обновлена: ${id}`);
-    return response.data.data.pages.create;
+  console.log(`Страница успешно обновлена: ${id}`);
+  return response.data.data.pages.create;
 }
-
 
 const main = async () => {
   const ids = [149];
@@ -120,7 +116,6 @@ const main = async () => {
   for (const id of ids) {
     await changeCodeblock(id);
   }
-}
+};
 
-
-main()
+// main()

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { config } = require('dotenv');
+
 config();
 
 async function deleteAsset(id) {
@@ -24,11 +25,11 @@ async function deleteAsset(id) {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
       data: {
-        query: graphqlMutation
-      }
+        query: graphqlMutation,
+      },
     });
 
     console.log('Asse успешно удален:', id);
@@ -41,23 +42,22 @@ async function deleteAsset(id) {
 const main = async () => {
   const ids = [
     {
-      "id": 72
+      id: 72,
     },
     {
-      "id": 73
+      id: 73,
     },
     {
-      "id": 74
+      id: 74,
     },
     {
-      "id": 75
-    }
-  ]
-
+      id: 75,
+    },
+  ];
 
   for (const { id } of ids) {
     await deleteAsset(id);
   }
-}
+};
 
-main()
+main();

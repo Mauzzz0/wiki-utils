@@ -7,11 +7,33 @@
     "create:page": "node create_page_graphql.js",
     "delete:page": "node delete_page_graphql.js"
   },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 120,
+    "tabWidth": 2,
+    "endOfLine": "lf"
+  },
   "dependencies": {
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
     "nanoid": "^3.3.11",
     "querystring": "^0.2.1",
     "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@types/eslint__js": "^8.42.3",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.10.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.29.0"
   }
 }

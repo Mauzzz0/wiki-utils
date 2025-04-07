@@ -33,7 +33,7 @@ const bootstrap = async () => {
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-  const source = './' + await getLatestSqlFile('./backups');
+  const source = './' + (await getLatestSqlFile('./backups'));
 
   const chatId = 834333336;
   await bot.telegram.sendMessage(chatId, 'Создан бекап базы данных');

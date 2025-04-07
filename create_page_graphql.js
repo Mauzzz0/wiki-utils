@@ -10,9 +10,9 @@ async function createPage(filename, path, file) {
   const graphqlEndpoint = 'http://localhost/graphql';
   const authToken = process.env.TMP_WIKI_JS_API_TOKEN;
 
-  const content = fs.readFileSync(filename, 'utf8')
+  const content = fs.readFileSync(filename, 'utf8');
 
-  const slug = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 3)()
+  const slug = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 3)();
 
   const graphqlMutation = `
         mutation {
@@ -25,7 +25,7 @@ async function createPage(filename, path, file) {
                     isPrivate: false
                     locale: "ru"
                     path: "${path}/${slug}"
-                    title: "${file.replace('.md', '')} (x)"
+                    title: "${file.replace('.md', '')}"
                     tags: []
                 ) {
                     responseResult {
@@ -50,36 +50,147 @@ async function createPage(filename, path, file) {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
       data: {
-        query: graphqlMutation
-      }
+        query: graphqlMutation,
+      },
     });
 
-    const { id, path, title }  = response.data.data.pages.create.page
+    const { id, path, title } = response.data.data.pages.create.page;
     console.log(`Страница успешно создана: ${id} ${path} ${title}`);
-    return response.data.data.pages.create;
+    return id;
   } catch (error) {
     console.error('Ошибка при создании страницы:', error.response?.data || error.message);
     throw error;
   }
 }
 
+async function changeCodeblock(id) {
+  const graphqlEndpoint = 'http://localhost/graphql';
+  const authToken = process.env.TMP_WIKI_JS_API_TOKEN;
 
+  const convert = `
+  mutation Pages {
+    pages {
+      convert(id:${id}, editor:"ckeditor") {
+        responseResult {
+                succeeded
+          }
+      }
+    }
+  }`;
+
+  const convertResponse = await axios({
+    url: graphqlEndpoint,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    data: { query: convert },
+  });
+
+  const graphqlQuery = `
+          query {
+            pages {
+                single(id: ${id}) {
+                    content
+                }
+            }
+        }
+    `;
+
+  const response = await axios({
+    url: graphqlEndpoint,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    data: { query: graphqlQuery },
+  });
+
+  let content = response.data.data.pages.single.content;
+
+  // Set TS for codeblock
+  const regex = /class="language-(plaintext|javascript|jsx|tsx)"/g;
+  content = content.replace(regex, 'class="language-typescript"');
+
+  // Up h3. (###) to h2. (##) and h2. (##) to h1. (#)
+  content = content.replace(/<\/?h2/g, (match) => (match === '<h2' ? '<h1' : '</h1'));
+  content = content.replace(/<\/?h3/g, (match) => (match === '<h3' ? '<h2' : '</h2'));
+
+  const newline = '<p>&nbsp;</p>';
+  content = content.replace(/<h2/g, newline + '\n' + '<h2');
+  // content = content.replace(/<h1>/g, newline + '\n' +'<h1>');
+
+  const mutation = `
+    mutation Pages {
+    pages {
+        update(id: ${id}, content: ${JSON.stringify(content)}, isPublished: true) {
+            responseResult {
+                succeeded
+            }
+        }
+    }
+}`;
+
+  await axios({
+    url: graphqlEndpoint,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    },
+    data: { query: mutation },
+  });
+
+  const render = `
+    mutation Pages {
+    pages {
+        render(id: ${id}) {
+            responseResult {
+                succeeded
+            }
+        }
+    }
+}`;
+
+  // await axios({
+  //   url: graphqlEndpoint,
+  //   method: 'post',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${authToken}`
+  //   },
+  //   data: { query: render }
+  // });
+
+  console.log(`Страница успешно обновлена: ${id}`);
+  return response.data.data.pages.create;
+}
 
 const main = async () => {
-  const wikiPathName = 'JavaScript'
-  const folder = 'release 2025-04-06T09:47:58.316Z JavaScript';
+  const wikiPathName = 'Backend-1';
+  const folder = 'release 2025-04-07T07:56:19.304Z Backend';
   const files = fs.readdirSync(folder);
+
+  const createdIds = [];
+
   for (const file of files) {
     if (!file.endsWith('.md')) {
       continue;
     }
 
-    await createPage(path.join(folder, file), wikiPathName, file);
+    const id = await createPage(path.join(folder, file), wikiPathName, file);
+
+    createdIds.push(id);
   }
-}
 
+  for (const id of createdIds) {
+    await changeCodeblock(id);
+  }
+};
 
-main()
+main();

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { config } = require('dotenv');
+
 config();
 
 async function deletePage(id) {
@@ -26,11 +27,11 @@ async function deletePage(id) {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
       data: {
-        query: graphqlMutation
-      }
+        query: graphqlMutation,
+      },
     });
 
     console.log('Страница успешно удалена:', id);
@@ -43,59 +44,46 @@ async function deletePage(id) {
 const main = async () => {
   const ids = [
     {
-      "id": 116
+      id: 191,
     },
     {
-      "id": 117
+      id: 190,
     },
     {
-      "id": 118
+      id: 189,
     },
     {
-      "id": 128
+      id: 188,
     },
     {
-      "id": 121
+      id: 187,
     },
     {
-      "id": 127
+      id: 186,
     },
     {
-      "id": 126
+      id: 185,
     },
     {
-      "id": 130
+      id: 184,
     },
     {
-      "id": 124
+      id: 183,
     },
     {
-      "id": 115
+      id: 182,
     },
     {
-      "id": 123
+      id: 181,
     },
     {
-      "id": 129
+      id: 180,
     },
-    {
-      "id": 120
-    },
-    {
-      "id": 122
-    },
-    {
-      "id": 119
-    },
-    {
-      "id": 125
-    }
-  ]
-
+  ];
 
   for (const { id } of ids) {
     await deletePage(id);
   }
-}
+};
 
-main()
+main();
