@@ -1,20 +1,36 @@
 import { getAllPages } from './get_all_pages';
+import { updateOnePage } from './update_one_page';
+
+const openTag = '<ul class="todo-list">\n';
+const closeTag = '</ul>\n';
+const nbsp = '<p>&nbsp;</p>\n';
+const header = `<blockquote><p><strong>⛔️ Технический раздел!</strong></p></blockquote>\n`;
 
 async function buildTodoListWithPageNames() {
+  const CONTENT_PAGE_ID = 232;
+
   let pages = await getAllPages();
 
-  // Sort by PATH's first word + title
   pages = pages
     .filter(({ path }) => !path.startsWith('Users'))
     .sort((a, b) => {
-      const [aPath] = a.path.split('/');
-      const [bPath] = b.path.split('/');
-      return aPath.localeCompare(bPath) || a.title.localeCompare(b.title);
-    });
+      const aHasSlash = a.path.includes('/');
+      const bHasSlash = b.path.includes('/');
 
-  const openTag = '<ul class="todo-list">\n';
-  const closeTag = '</ul>\n';
-  const nbsp = '<p>&nbsp;</p>\n';
+      if (aHasSlash !== bHasSlash) {
+        return aHasSlash ? 1 : -1;
+      }
+
+      const [aPathPart] = a.path.split('/');
+      const [bPathPart] = b.path.split('/');
+      const pathComparison = aPathPart.localeCompare(bPathPart);
+
+      if (pathComparison !== 0) {
+        return pathComparison;
+      }
+
+      return a.title.localeCompare(b.title);
+    });
 
   let { html } = pages.reduce(
     (acc, page) => {
@@ -30,7 +46,6 @@ async function buildTodoListWithPageNames() {
         acc.previousSection = section;
 
         acc.html += nbsp;
-        acc.html += nbsp;
         acc.html += `<h1>${section}</h1>\n`;
         acc.html += openTag;
       }
@@ -39,12 +54,14 @@ async function buildTodoListWithPageNames() {
 
       return acc;
     },
-    { html: '', previousSection: '' },
+    { html: header, previousSection: '' },
   );
 
   html += closeTag;
 
-  console.log(html);
+  await updateOnePage(CONTENT_PAGE_ID, { content: html });
+
+  console.log(`Page ${CONTENT_PAGE_ID} updated`);
 }
 
 buildTodoListWithPageNames();
