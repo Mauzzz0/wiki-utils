@@ -17,7 +17,16 @@ async function updateContentPage() {
    * Every not custom path with "/"
    * Custom order for paths with "/"
    */
-  const customSortingOrder = ['Intro', 'WebStorm', 'Git', 'Software', 'JavaScript', 'TypeScript', 'Backend-1'];
+  const customSortingOrder = [
+    'Intro',
+    'WebStorm',
+    'Git',
+    'Software',
+    'JavaScript',
+    'TypeScript',
+    'Backend-1',
+    'Backend-2',
+  ];
   pages = pages
     .filter(({ path }) => !path.startsWith('Users'))
     .sort((a, b) => {

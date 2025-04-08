@@ -161,8 +161,8 @@ async function changeCodeblock(id) {
 }
 
 const main = async () => {
-  const wikiPathName = 'Process-This';
-  const folder = 'release 2025-04-08T13:51:55.160Z Инструменты';
+  const wikiPathName = 'Backend-2';
+  const folder = 'release 2025-04-08T14:21:54.370Z Backend (Nest JS)';
   const files = fs.readdirSync(folder);
 
   const createdIds = [];

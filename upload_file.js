@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const fs = require('fs');
 
-const folder = './release 2025-04-08T13:51:55.160Z Инструменты/images/';
+const folder = './release 2025-04-08T14:21:54.370Z Backend (Nest JS)/images/';
 
 /**
  * WARNING! Should use only in localhost DEV mode. Due to server needs to disable checks at `/u` endpoint.
