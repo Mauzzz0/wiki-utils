@@ -3,8 +3,9 @@ import { headers, url } from './constants';
 
 export async function updateOnePage(
   pageId: number,
-  options?: {
-    content?: string;
+  options: {
+    title?: string;
+    content: string;
   },
 ) {
   const query = gql`
@@ -13,7 +14,8 @@ export async function updateOnePage(
         update(
         id: ${pageId},
         isPublished: true,
-        ${options?.content ? `content: ${JSON.stringify(options.content)}` : ''} 
+        ${options.title ? `title: ${JSON.stringify(options.title)}` : ''} 
+        ${options.content ? `content: ${JSON.stringify(options.content)}` : ''} 
         ) {
           responseResult {
             succeeded
@@ -23,5 +25,7 @@ export async function updateOnePage(
     }
   `;
 
-  await request<any>(url, query, {}, headers);
+  const res = await request<any>(url, query, {}, headers);
+
+  debugger;
 }
