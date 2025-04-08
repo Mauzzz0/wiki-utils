@@ -18,7 +18,7 @@ function cleanName(name) {
 // Конфигурация
 const SOURCE =
   './notion_dump/Notion dump 4 apr 2025 MD version/Private & Shared/Node JS Backend 59c3d6825fe94f988d9ff66bf09799c6';
-const SUBFOLDER = `Инструменты 183e3e6c7873809a91f1edabea498c10/Git dedbcffb68d44d92adfada568ea5201a`;
+const SUBFOLDER = `Инструменты 183e3e6c7873809a91f1edabea498c10`;
 const SOURCE_DIR = SOURCE + '/' + SUBFOLDER;
 const TARGET_DIR = `release ${new Date().toISOString()} ` + cleanName(SUBFOLDER);
 
@@ -80,7 +80,7 @@ async function main() {
         originalMdFileContent = originalMdFileContent.replace(`[${fileInFolder}]`, `[${newFileName}]`);
 
         fs.mkdirSync(path.join(TARGET_DIR, 'images'), { recursive: true });
-        await fs.copyFileSync(path.join(folderPath, fileInFolder), path.join(TARGET_DIR, 'images', newFileName));
+        fs.copyFileSync(path.join(folderPath, fileInFolder), path.join(TARGET_DIR, 'images', newFileName));
       }
     }
 

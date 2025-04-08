@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const fs = require('fs');
 
-const folder = './release 2025-04-08T13:02:40.820Z Инструменты 183e3e6c7873809a91f1edabea498c10/Git/images/';
+const folder = './release 2025-04-08T13:51:55.160Z Инструменты/images/';
 
 /**
  * WARNING! Should use only in localhost DEV mode. Due to server needs to disable checks at `/u` endpoint.

@@ -161,8 +161,8 @@ async function changeCodeblock(id) {
 }
 
 const main = async () => {
-  const wikiPathName = 'Git';
-  const folder = 'release 2025-04-08T13:02:40.820Z Инструменты 183e3e6c7873809a91f1edabea498c10/Git';
+  const wikiPathName = 'Process-This';
+  const folder = 'release 2025-04-08T13:51:55.160Z Инструменты';
   const files = fs.readdirSync(folder);
 
   const createdIds = [];
