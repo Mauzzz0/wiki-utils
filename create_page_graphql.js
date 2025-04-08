@@ -123,7 +123,6 @@ async function changeCodeblock(id) {
 
   const newline = '<p>&nbsp;</p>';
   content = content.replace(/<h2/g, newline + '\n' + '<h2');
-  // content = content.replace(/<h1>/g, newline + '\n' +'<h1>');
 
   const mutation = `
     mutation Pages {
@@ -157,23 +156,13 @@ async function changeCodeblock(id) {
     }
 }`;
 
-  // await axios({
-  //   url: graphqlEndpoint,
-  //   method: 'post',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${authToken}`
-  //   },
-  //   data: { query: render }
-  // });
-
   console.log(`Страница успешно обновлена: ${id}`);
   return response.data.data.pages.create;
 }
 
 const main = async () => {
-  const wikiPathName = 'Backend-1';
-  const folder = 'release 2025-04-07T07:56:19.304Z Backend';
+  const wikiPathName = 'Git';
+  const folder = 'release 2025-04-08T13:02:40.820Z Инструменты 183e3e6c7873809a91f1edabea498c10/Git';
   const files = fs.readdirSync(folder);
 
   const createdIds = [];

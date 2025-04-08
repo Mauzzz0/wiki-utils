@@ -23,11 +23,11 @@ services:
       - .env
     environment:
       DB_TYPE: postgres
-      DB_HOST: db
-      DB_PORT: 5432 #Internal PG port
-      DB_USER: $POSTGRES_USER
-      DB_PASS: $POSTGRES_PASSWORD
-      DB_NAME: $POSTGRES_DB
+      DB_HOST: 188.120.224.251
+      DB_PORT: 9012 #Internal PG port
+      DB_USER: master_wiki_js
+      DB_PASS: PcCe=v_HmkA65gtKJpzuUE
+      DB_NAME: wiki
     restart: unless-stopped
     ports:
       - "80:3000"

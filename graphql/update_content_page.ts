@@ -6,7 +6,7 @@ const closeTag = '</ul>\n';
 const nbsp = '<p>&nbsp;</p>\n';
 const header = `<blockquote><p><strong>⛔️ Технический раздел!</strong></p></blockquote>\n`;
 
-async function buildTodoListWithPageNames() {
+async function updateContentPage() {
   const CONTENT_PAGE_ID = 232;
 
   let pages = await getAllPages();
@@ -64,4 +64,4 @@ async function buildTodoListWithPageNames() {
   console.log(`Page ${CONTENT_PAGE_ID} updated`);
 }
 
-buildTodoListWithPageNames();
+updateContentPage();
