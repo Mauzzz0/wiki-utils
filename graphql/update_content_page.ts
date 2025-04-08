@@ -11,6 +11,13 @@ async function updateContentPage() {
 
   let pages = await getAllPages();
 
+  /**
+   * Sorting order:
+   * Every not custom path without "/"
+   * Every not custom path with "/"
+   * Custom order for paths with "/"
+   */
+  const customSortingOrder = ['Intro', 'WebStorm', 'Git', 'Software', 'JavaScript', 'TypeScript', 'Backend-1'];
   pages = pages
     .filter(({ path }) => !path.startsWith('Users'))
     .sort((a, b) => {
@@ -23,6 +30,14 @@ async function updateContentPage() {
 
       const [aPathPart] = a.path.split('/');
       const [bPathPart] = b.path.split('/');
+
+      const aPriority = customSortingOrder.indexOf(aPathPart);
+      const bPriority = customSortingOrder.indexOf(bPathPart);
+
+      if (aPriority !== bPriority) {
+        return aPriority > bPriority ? 1 : -1;
+      }
+
       const pathComparison = aPathPart.localeCompare(bPathPart);
 
       if (pathComparison !== 0) {

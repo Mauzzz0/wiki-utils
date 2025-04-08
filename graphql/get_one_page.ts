@@ -1,5 +1,5 @@
 import { gql, request } from 'graphql-request';
-import { headers, url } from './common';
+import { headers, url } from './constants';
 
 export async function getOnePage(
   pageId: number,

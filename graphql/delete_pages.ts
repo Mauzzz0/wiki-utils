@@ -1,5 +1,5 @@
 import { request } from 'graphql-request';
-import { headers, url } from './common';
+import { headers, url } from './constants';
 
 export async function deletePages(pageId: number | number[] | { id: number }[]) {
   const ids = [pageId].flat(2).map((value) => {
