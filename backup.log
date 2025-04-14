@@ -1,5 +1,0 @@
-
-> wiki@1.0.0 backup:send
-> node tg_send_backup.js
-
-Backup completed: /root/wiki/backups/backup_2025-04-05_13:50:30.sql

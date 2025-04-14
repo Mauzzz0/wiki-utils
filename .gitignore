@@ -2,6 +2,7 @@
 backups
 .DS_Store
 .env
+.env.docker
 notion_dump
 node_modules
 Cleaned_Structure_1

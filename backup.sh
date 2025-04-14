@@ -1,18 +1,13 @@
 #!/bin/bash
 
-source ~/wiki/.env
+source ~/wiki/wiki-utils/.env
 
-# Variables
-BACKUP_DIR=~/wiki/backups
-CONTAINER_NAME=wiki-db-1
-
-# Get current date and time for backup file
+BACKUP_DIR=~/wiki/wiki-utils/backups
 TIMESTAMP=$(date +"%F_%T")
 BACKUP_FILE=$BACKUP_DIR/backup_$POSTGRES_DB_$TIMESTAMP.sql
 
-# Run pg_dump inside the PostgreSQL container
-docker exec -t $CONTAINER_NAME pg_dump -U $POSTGRES_USER $POSTGRES_DB > $BACKUP_FILE
+docker exec -t $POSTGRES_CONTAINER_NAME pg_dump -U $POSTGRES_USER $POSTGRES_DB > $BACKUP_FILE
 
-cd ~/wiki && npm run backup:send
+cd ~/wiki/wiki-utils && npm run backup:notify
 
 echo "Backup completed: $BACKUP_FILE"
