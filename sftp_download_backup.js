@@ -25,26 +25,43 @@ const config = {
   password: process.env.SFTP_PASSWORD,
 };
 
-const filename = 'backup_2025-04-08_17:30:04.sql';
-const remoteFilePath = `/root/wiki/backups/${filename}`;
+const remoteDir = `/root/wiki/backups`;
 const localDir = './backups';
 
-async function downloadFile() {
+async function downloadLatestFile() {
   const sftp = new Client();
 
   try {
     await sftp.connect(config);
     console.log('Подключение к SFTP успешно установлено');
 
+    // Получаем список файлов в удаленной директории
+    const files = await sftp.list(remoteDir);
+
+    // Фильтруем только файлы (исключаем директории)
+    const fileList = files.filter((file) => !file.isDirectory);
+
+    if (fileList.length === 0) {
+      console.log('В папке backups нет файлов');
+      return;
+    }
+
+    // Сортируем файлы по дате изменения (новые сначала)
+    fileList.sort((a, b) => b.modifyTime - a.modifyTime);
+
+    // Берем самый новый файл
+    const latestFile = fileList[0];
+    const remoteFilePath = path.join(remoteDir, latestFile.name);
+
+    console.log(`Самый новый файл: ${latestFile.name}, изменен: ${new Date(latestFile.modifyTime).toISOString()}`);
+    console.log(`Размер файла: ${formatFileSize(latestFile.size)}`);
+
+    // Создаем локальную директорию если ее нет
     if (!fs.existsSync(localDir)) {
       fs.mkdirSync(localDir, { recursive: true });
     }
 
-    const localPath = path.join(localDir, filename);
-
-    const fileInfo = await sftp.stat(remoteFilePath);
-    const totalSize = fileInfo.size;
-    console.log(`Размер файла: ${formatFileSize(totalSize)}`);
+    const localPath = path.join(localDir, latestFile.name);
 
     await sftp.get(remoteFilePath, localPath);
     console.log(`Файл успешно скачан в ${localPath}`);
@@ -56,4 +73,4 @@ async function downloadFile() {
   }
 }
 
-downloadFile();
+downloadLatestFile();
