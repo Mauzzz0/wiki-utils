@@ -3,7 +3,7 @@ import { headers, url } from './constants';
 
 export async function getOnePage(
   pageId: number,
-): Promise<{ id: number; path: string; render: string; content: string }> {
+): Promise<{ id: number; path: string; render: string; content: string; title: string }> {
   const query = gql`
     query Pages {
       pages {
@@ -12,6 +12,7 @@ export async function getOnePage(
           path
           render
           content
+          title
         }
       }
     }
