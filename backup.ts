@@ -1,8 +1,9 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { config } from 'dotenv';
-import { createReadStream, statSync } from 'fs';
+import { createReadStream, readdirSync, statSync, unlinkSync } from 'fs';
 import { execSync } from 'node:child_process';
+import { join } from 'path';
 import { Telegraf } from 'telegraf';
 
 config();
@@ -41,6 +42,34 @@ const createBackup = () => {
     filepath,
     duration: msToSec(Date.now() - start),
   };
+};
+
+const removeOldFiles = () => {
+  const keepLast = 10;
+
+  const prefix = 'backup_';
+  const dir = './backups';
+
+  const files = readdirSync(dir)
+    .filter((file) => file.startsWith(prefix))
+    .map((file) => ({
+      name: file,
+      time: statSync(join(dir, file)).mtime.getTime(),
+    }))
+    .sort((a, b) => b.time - a.time);
+
+  if (files.length > keepLast) {
+    const filesToDelete = files.slice(keepLast);
+
+    filesToDelete.forEach((file) => {
+      const filePath = join(dir, file.name);
+      unlinkSync(filePath);
+    });
+
+    return filesToDelete.length;
+  }
+
+  return 0;
 };
 
 const uploadFileToYaDisk = async (file: { filepath: string; filename: string }) => {
@@ -88,6 +117,8 @@ const bootstrap = async () => {
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
+  const removed = removeOldFiles();
+
   const size = prettifyFilesize(statSync(backup.filepath).size);
 
   await bot.telegram.sendMessage(
@@ -96,8 +127,9 @@ const bootstrap = async () => {
    ━━━━━━━━━━━━━━━  
    📂 *Файл:* \`${backup.filename}\`  
    📊 *Размер:* \`${size}\`
-   ⚒️️ *Время создания:* \`${backup.duration}\` сек
+   ⌛️ *Время создания:* \`${backup.duration}\` сек
    ⌛️ *Время загрузки:* \`${uploadTime}\` сек
+   🗑️ *Удалено старых:* \`${removed}\` файлов
    [Открыть бекапы](https://disk.yandex.ru/client/disk/Backups)`,
     // eslint-disable-next-line camelcase
     { parse_mode: 'MarkdownV2' },
