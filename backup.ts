@@ -112,18 +112,17 @@ const bootstrap = async () => {
 
   const bot = new Telegraf(process.env.TG_TOKEN);
 
-  bot.launch();
+  bot.launch(async () => {
+    process.once('SIGINT', () => bot.stop('SIGINT'));
+    process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-  process.once('SIGINT', () => bot.stop('SIGINT'));
-  process.once('SIGTERM', () => bot.stop('SIGTERM'));
+    const removed = removeOldFiles();
 
-  const removed = removeOldFiles();
+    const size = prettifyFilesize(statSync(backup.filepath).size);
 
-  const size = prettifyFilesize(statSync(backup.filepath).size);
-
-  await bot.telegram.sendMessage(
-    chatId,
-    `✅ *Создан бекап базы данных*  
+    await bot.telegram.sendMessage(
+      chatId,
+      `✅ *Создан бекап базы данных*  
    ━━━━━━━━━━━━━━━  
    📂 *Файл:* \`${backup.filename}\`  
    📊 *Размер:* \`${size}\`
@@ -131,12 +130,13 @@ const bootstrap = async () => {
    ⌛️ *Время загрузки:* \`${uploadTime}\` сек
    🗑️ *Удалено старых:* \`${removed}\` файлов
    [Открыть бекапы](https://disk.yandex.ru/client/disk/Backups)`,
-    // eslint-disable-next-line camelcase
-    { parse_mode: 'MarkdownV2' },
-  );
+      // eslint-disable-next-line camelcase
+      { parse_mode: 'MarkdownV2' },
+    );
 
-  bot.stop();
-  process.exit();
+    bot.stop();
+    process.exit();
+  });
 };
 
 bootstrap();
