@@ -25,7 +25,7 @@ const config = {
   password: process.env.SFTP_PASSWORD,
 };
 
-const remoteDir = `/root/wiki/backups`;
+const remoteDir = `/root/wiki/wiki-utils/backups`;
 const localDir = './backups';
 
 async function downloadLatestFile() {

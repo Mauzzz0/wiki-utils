@@ -10,9 +10,9 @@ const initializeProcess = async () => {
   const allowPublicGroupId = 4;
 
   const student = {
-    name: 'roman',
-    email: 'roman@roman.com',
-    passwordRaw: 'roman1',
+    name: 'aa', // off. $Name for disabled
+    email: 'aa@gmail.com',
+    passwordRaw: 'aa', // pwd "inactive" for disabled
   };
 
   const slug = nanoid(6);
@@ -36,8 +36,6 @@ const initializeProcess = async () => {
 
   // User
   await registerNewUser({ ...student, groups: [allowPublicGroupId, group.id] });
-
-  debugger;
 };
 
 initializeProcess();
