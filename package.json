@@ -2,10 +2,7 @@
   "name": "wiki",
   "version": "1.0.0",
   "scripts": {
-    "backup:notify": "ts-node tg-backup-notify.ts",
-    "process:notion": "node process_notion.js",
-    "create:page": "node create_page_graphql.js",
-    "delete:page": "node delete_page_graphql.js"
+    "backup": "ts-node backup.ts"
   },
   "prettier": {
     "singleQuote": true,
@@ -16,6 +13,7 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "form-data": "^4.0.2",
     "graphql": "^16.10.0",
