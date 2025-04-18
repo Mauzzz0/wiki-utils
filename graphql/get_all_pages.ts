@@ -4,7 +4,7 @@ import { headers, url } from './constants';
 export async function getAllPages(query?: {
   orderBy?: string;
   orderByDirection?: 'ASC' | 'DESC';
-}): Promise<{ id: number; path: string; title: string }[]> {
+}): Promise<{ id: number; path: string; title: string; orderPriority: number }[]> {
   const { orderBy, orderByDirection } = query ?? {};
 
   const gquery = gql`
@@ -18,6 +18,7 @@ export async function getAllPages(query?: {
           id
           path
           title
+          orderPriority
         }
       }
     }

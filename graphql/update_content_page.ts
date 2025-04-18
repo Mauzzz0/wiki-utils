@@ -53,7 +53,7 @@ async function updateContentPage() {
         return pathComparison;
       }
 
-      return a.title.localeCompare(b.title);
+      return a.orderPriority - b.orderPriority;
     });
 
   let { html } = pages.reduce(
