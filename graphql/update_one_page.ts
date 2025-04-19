@@ -26,6 +26,4 @@ export async function updateOnePage(
   `;
 
   const res = await request<any>(url, query, {}, headers);
-
-  debugger;
 }
